@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/AndreasBackx/remote-and-chill/models"
 	"github.com/graphql-go/graphql"
+	"github.com/satori/go.uuid"
 )
 
 var User = graphql.NewObject(graphql.ObjectConfig{
@@ -24,6 +25,13 @@ var User = graphql.NewObject(graphql.ObjectConfig{
 		"expiresAt": &graphql.Field{
 			Type:        graphql.NewNonNull(graphql.DateTime),
 			Description: "Moment when user is deleted/forgotten.",
+		},
+		"groups": &graphql.Field{
+			Type:        graphql.NewNonNull(graphql.NewList(Group)),
+			Description: "Moment when user is deleted/forgotten.",
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				user := params.Source.(*models.User)
+			},
 		},
 	},
 })
@@ -96,6 +104,48 @@ var Mutation = graphql.NewObject(graphql.ObjectConfig{
 				users = append(users, user)
 				group := models.NewGroup(name, user)
 				groups = append(groups, group)
+
+				return models.NewGroupResponse(group, user), nil
+			},
+		},
+		"joinGroup": &graphql.Field{
+			Type: graphql.NewNonNull(GroupResponse),
+			Args: graphql.FieldConfigArgument{
+				"groupId": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.ID),
+				},
+				"userName": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.String),
+				},
+			},
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				groupIDString, _ := params.Args["groupId"].(string)
+				groupID, err := uuid.FromString(groupIDString)
+				if err != nil {
+					return nil, errors.New("Invalid group ID")
+				}
+
+				userName, _ := params.Args["userName"].(string)
+
+				if userName == "" {
+					return nil, errors.New("Name of a user cannot be empty")
+				}
+
+				user := models.NewUser(userName)
+				users = append(users, user)
+
+				var group *models.Group
+				for _, g := range groups {
+					if g.ID == groupID {
+						group = g
+					}
+				}
+				if group == nil {
+					return nil, errors.New("Group does not exist")
+				}
+
+				// TODO Mutexes
+				group.Members = append(group.Members, user)
 
 				return models.NewGroupResponse(group, user), nil
 			},
