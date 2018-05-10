@@ -24,11 +24,6 @@
 #   go-tests = true
 #   unused-packages = true
 
-
-[[constraint]]
-  name = "github.com/graphql-go/graphql"
-  version = "0.7.5"
-
 [prune]
   go-tests = true
   unused-packages = true

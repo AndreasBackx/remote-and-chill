@@ -1,0 +1,4 @@
+type GroupResponse {
+    user: User!
+    group: Group!
+}

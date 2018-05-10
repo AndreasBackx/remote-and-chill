@@ -1,5 +1,7 @@
 remote-and-chill
 vendor/
+main-packr.go
+
 
 # Created by https://www.gitignore.io/api/go,macos,linux,visualstudiocode
 

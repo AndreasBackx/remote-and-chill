@@ -1,0 +1,15 @@
+type User {
+    # UUID of the user.
+    id: ID!
+    # Secret UUID of the user for authentication. Only visible for the authenticated user itself.
+    secret: ID
+    # Name of the user.
+    name: String!
+    # Moment when user is created.
+    createdAt: Time!
+    # Moment when user is deleted/forgotten.
+    expiresAt: Time!
+
+    # # Group the user is a member of.
+    group: Group!
+}

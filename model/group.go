@@ -1,8 +1,10 @@
-package models
+package model
 
 import (
 	"github.com/satori/go.uuid"
 )
+
+var Groups []*Group
 
 type Group struct {
 	ID      uuid.UUID `json:"id"`

@@ -1,0 +1,10 @@
+type Group {
+    # UUID of the group.
+    id: ID!
+    # Name of the group.
+    name: String!
+    # Creator of the group or another user if the creator left.
+    owner: User!
+    # Moment when user is deleted/forgotten.
+    members: [User]!
+}

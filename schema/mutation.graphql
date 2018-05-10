@@ -1,0 +1,10 @@
+type Mutation {
+    # Create a group and a user.
+    createGroup(name: String!, userName: String!): GroupResponse!
+    # # Join a group and create a user if you're not registered.
+    joinGroup(groupId: ID!, userName: String!): GroupResponse!
+    # # Leave a group and delete your user.
+    # leaveGroup(groupId: ID!): GroupResponse!
+    # # Close a group, only the owner can close a group. Returns true if group was closed.
+    # closeGroup(groupId: ID!): Boolean!
+}

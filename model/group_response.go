@@ -1,4 +1,4 @@
-package models
+package model
 
 type GroupResponse struct {
 	Group *Group `json:"group"`
