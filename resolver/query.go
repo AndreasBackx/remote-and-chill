@@ -2,15 +2,15 @@ package resolver
 
 import (
 	"context"
-	"errors"
 	"github.com/AndreasBackx/remote-and-chill/model"
 )
 
-func (resolver *Resolver) Me(ctx context.Context) (*userResolver, error) {
-	me := ctx.Value(Me)
+// Me returns the currently authenticated user.
+func (resolver *Resolver) Me(ctx context.Context) (*UserResolver, error) {
+	me, err := model.AuthenticatedUser(ctx, Me)
 
-	if me != nil {
-		return &userResolver{me.(*model.User), false}, nil
+	if err != nil {
+		return nil, err
 	}
-	return nil, errors.New("Unauthenticated")
+	return &UserResolver{me, false}, nil
 }

@@ -7,17 +7,17 @@ import (
 	graphql "github.com/graph-gophers/graphql-go"
 )
 
-type userResolver struct {
+type UserResolver struct {
 	user       *model.User
 	showSecret bool
 }
 
-func (r *userResolver) ID() graphql.ID {
+func (r *UserResolver) ID() graphql.ID {
 	return graphql.ID(r.user.ID.String())
 }
 
 // TODO Proper nil usage.
-func (r *userResolver) Secret(ctx context.Context) (*graphql.ID, error) {
+func (r *UserResolver) Secret(ctx context.Context) (*graphql.ID, error) {
 	if !r.showSecret {
 		return nil, errors.New("User secrets can only be requested on creation")
 	}
@@ -26,22 +26,22 @@ func (r *userResolver) Secret(ctx context.Context) (*graphql.ID, error) {
 	return &tmp, nil
 }
 
-func (r *userResolver) Name() string {
+func (r *UserResolver) Name() string {
 	return r.user.Name
 }
-func (r *userResolver) CreatedAt() graphql.Time {
+func (r *UserResolver) CreatedAt() graphql.Time {
 	return graphql.Time{Time: r.user.CreatedAt}
 }
 
-func (r *userResolver) ExpiresAt() graphql.Time {
+func (r *UserResolver) ExpiresAt() graphql.Time {
 	return graphql.Time{Time: r.user.ExpiresAt}
 }
 
-func (r *userResolver) Group() (*groupResolver, error) {
+func (r *UserResolver) Group() (*GroupResolver, error) {
 	for _, group := range model.Groups {
 		for _, member := range group.Members {
 			if member == r.user {
-				return &groupResolver{group}, nil
+				return &GroupResolver{group}, nil
 			}
 		}
 	}

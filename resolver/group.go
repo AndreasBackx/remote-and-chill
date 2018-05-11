@@ -5,26 +5,26 @@ import (
 	graphql "github.com/graph-gophers/graphql-go"
 )
 
-type groupResolver struct {
+type GroupResolver struct {
 	group *model.Group
 }
 
-func (r *groupResolver) ID() graphql.ID {
+func (r *GroupResolver) ID() graphql.ID {
 	return graphql.ID(r.group.ID.String())
 }
 
-func (r *groupResolver) Name() string {
+func (r *GroupResolver) Name() string {
 	return r.group.Name
 }
 
-func (r *groupResolver) Owner() *userResolver {
-	return &userResolver{r.group.Owner, false}
+func (r *GroupResolver) Owner() *UserResolver {
+	return &UserResolver{r.group.Owner, false}
 }
 
-func (r *groupResolver) Members() []*userResolver {
-	members := []*userResolver{}
+func (r *GroupResolver) Members() []*UserResolver {
+	members := []*UserResolver{}
 	for _, member := range r.group.Members {
-		members = append(members, &userResolver{member, false})
+		members = append(members, &UserResolver{member, false})
 	}
 	return members
 }

@@ -10,7 +10,7 @@ import (
 func (resolver *Resolver) CreateGroup(ctx context.Context, args *struct {
 	Name     string
 	UserName string
-}) (*groupResponseResolver, error) {
+}) (*GroupResponseResolver, error) {
 
 	if args.Name == "" {
 		return nil, errors.New("Name of a group cannot be empty")
@@ -21,18 +21,16 @@ func (resolver *Resolver) CreateGroup(ctx context.Context, args *struct {
 	}
 
 	user := model.NewUser(args.UserName)
-	model.Users = append(model.Users, user)
 	group := model.NewGroup(args.Name, user)
-	model.Groups = append(model.Groups, group)
 	response := model.NewGroupResponse(group, user)
 
-	return &groupResponseResolver{response, false}, nil
+	return &GroupResponseResolver{response, false}, nil
 }
 
 func (resolver *Resolver) JoinGroup(ctx context.Context, args *struct {
 	GroupID  string
 	UserName string
-}) (*groupResponseResolver, error) {
+}) (*GroupResponseResolver, error) {
 	groupID, err := uuid.FromString(args.GroupID)
 	if err != nil {
 		return nil, errors.New("Invalid group ID")
@@ -55,9 +53,62 @@ func (resolver *Resolver) JoinGroup(ctx context.Context, args *struct {
 		return nil, errors.New("Group does not exist")
 	}
 
-	// TODO Mutexes
-	group.Members = append(group.Members, user)
+	err = group.Join(user)
+	if err != nil {
+		return nil, err
+	}
+
 	response := model.NewGroupResponse(group, user)
 
-	return &groupResponseResolver{response, false}, nil
+	return &GroupResponseResolver{response, false}, nil
+}
+
+func (resolver *Resolver) LeaveGroup(ctx context.Context, args *struct {
+	GroupID string
+}) (*GroupResponseResolver, error) {
+	groupID, err := uuid.FromString(args.GroupID)
+	if err != nil {
+		return nil, errors.New("Invalid group ID")
+	}
+
+	me, err := model.AuthenticatedUser(ctx, Me)
+	if err != nil {
+		return nil, err
+	}
+
+	group, err := model.GetGroup(groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	group.Leave(me)
+	response := model.NewGroupResponse(group, nil)
+
+	return &GroupResponseResolver{response, false}, nil
+}
+
+func (resolver *Resolver) DeleteGroup(ctx context.Context, args *struct {
+	GroupID string
+}) (bool, error) {
+	groupID, err := uuid.FromString(args.GroupID)
+	if err != nil {
+		return false, errors.New("Invalid group ID")
+	}
+
+	me, err := model.AuthenticatedUser(ctx, Me)
+	if err != nil {
+		return false, err
+	}
+
+	group, err := model.GetGroup(groupID)
+	if err != nil {
+		return false, err
+	}
+
+	if group.Owner != me {
+		return false, errors.New("Only owners of a group can delete the group")
+	}
+
+	group.Delete()
+	return true, nil
 }

@@ -4,15 +4,15 @@ import (
 	"github.com/AndreasBackx/remote-and-chill/model"
 )
 
-type groupResponseResolver struct {
+type GroupResponseResolver struct {
 	response   *model.GroupResponse
 	showSecret bool
 }
 
-func (r *groupResponseResolver) User() *userResolver {
-	return &userResolver{r.response.User, true}
+func (r *GroupResponseResolver) User() *UserResolver {
+	return &UserResolver{r.response.User, true}
 }
 
-func (r *groupResponseResolver) Group() *groupResolver {
-	return &groupResolver{r.response.Group}
+func (r *GroupResponseResolver) Group() *GroupResolver {
+	return &GroupResolver{r.response.Group}
 }
