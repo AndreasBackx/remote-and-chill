@@ -5,6 +5,7 @@ import (
 	"github.com/AndreasBackx/remote-and-chill/model"
 	"github.com/AndreasBackx/remote-and-chill/resolver"
 	graphql "github.com/graph-gophers/graphql-go"
+	"github.com/pusher/pusher-http-go"
 	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 	"log"
@@ -17,7 +18,7 @@ func apiHandler(writer http.ResponseWriter, request *http.Request) {
 	ctx := request.Context()
 
 	if err == nil {
-		ctx = model.Login(secret, ctx, resolver.Me)
+		ctx, _ = model.Login(secret, ctx, resolver.Me)
 	}
 
 	var params struct {
@@ -45,6 +46,21 @@ func apiHandler(writer http.ResponseWriter, request *http.Request) {
 }
 
 func main() {
+	config, err := LoadConfig("config.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	client := pusher.Client{
+		AppId:   config.Pusher.AppId,
+		Key:     config.Pusher.Key,
+		Secret:  config.Pusher.Secret,
+		Host:    config.Pusher.Host,
+		Secure:  config.Pusher.Secure,
+		Cluster: config.Pusher.Cluster,
+	}
+	resolver.Setup(client)
+
 	http.HandleFunc("/", apiHandler)
 
 	log.Fatal(http.ListenAndServe(":3000", nil))

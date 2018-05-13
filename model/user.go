@@ -21,6 +21,18 @@ type User struct {
 
 var expirationDuration = time.Hour * time.Duration(1)
 
+// Group returns the group the user is a member of.
+func (user *User) Group() (*Group, error) {
+	for _, group := range Groups {
+		for _, member := range group.Members {
+			if member == user {
+				return group, nil
+			}
+		}
+	}
+	return nil, errors.New("User does not belong to a group? This should never be the case")
+}
+
 // Delete the group from the list of users.
 func (user *User) Delete() {
 	for index, u := range Users {

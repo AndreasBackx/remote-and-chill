@@ -44,10 +44,28 @@
   version = "v0.8.0"
 
 [[projects]]
+  name = "github.com/pusher/pusher-http-go"
+  packages = ["."]
+  revision = "ea13abeb083c60527a59138c8c5b906574b7cef2"
+  version = "v1.2.0"
+
+[[projects]]
   name = "github.com/satori/go.uuid"
   packages = ["."]
   revision = "f58768cc1a7a7e77a3bd49e98cdd21419399b6a3"
   version = "v1.2.0"
+
+[[projects]]
+  name = "github.com/sirupsen/logrus"
+  packages = ["."]
+  revision = "c155da19408a8799da419ed3eeb0cb5db0ad5dbc"
+  version = "v1.0.5"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/crypto"
+  packages = ["ssh/terminal"]
+  revision = "2d027ae1dddd4694d54f7a8b6cbe78dca8720226"
 
 [[projects]]
   branch = "master"
@@ -55,9 +73,18 @@
   packages = ["context"]
   revision = "f73e4c9ed3b7ebdd5f699a16a880c2b1994e50dd"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/sys"
+  packages = [
+    "unix",
+    "windows"
+  ]
+  revision = "d0faeb539838e250bd0a9db4182d48d4a1915181"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "9bae305805e578b1c31ba5988d47e38a9a898227308c830b24fe18b4994c1174"
+  inputs-digest = "7fdbcb974134a37f6f595d2bc986aaf7ab32c442d1c71c130670f1f30488ede8"
   solver-name = "gps-cdcl"
   solver-version = 1

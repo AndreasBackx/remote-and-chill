@@ -63,20 +63,13 @@ func (resolver *Resolver) JoinGroup(ctx context.Context, args *struct {
 	return &GroupResponseResolver{response, false}, nil
 }
 
-func (resolver *Resolver) LeaveGroup(ctx context.Context, args *struct {
-	GroupID string
-}) (*GroupResponseResolver, error) {
-	groupID, err := uuid.FromString(args.GroupID)
-	if err != nil {
-		return nil, errors.New("Invalid group ID")
-	}
-
+func (resolver *Resolver) LeaveGroup(ctx context.Context, args *struct{}) (*GroupResponseResolver, error) {
 	me, err := model.AuthenticatedUser(ctx, Me)
 	if err != nil {
 		return nil, err
 	}
 
-	group, err := model.GetGroup(groupID)
+	group, err := me.Group()
 	if err != nil {
 		return nil, err
 	}
@@ -87,20 +80,13 @@ func (resolver *Resolver) LeaveGroup(ctx context.Context, args *struct {
 	return &GroupResponseResolver{response, false}, nil
 }
 
-func (resolver *Resolver) DeleteGroup(ctx context.Context, args *struct {
-	GroupID string
-}) (bool, error) {
-	groupID, err := uuid.FromString(args.GroupID)
-	if err != nil {
-		return false, errors.New("Invalid group ID")
-	}
-
+func (resolver *Resolver) DeleteGroup(ctx context.Context, args *struct{}) (bool, error) {
 	me, err := model.AuthenticatedUser(ctx, Me)
 	if err != nil {
 		return false, err
 	}
 
-	group, err := model.GetGroup(groupID)
+	group, err := me.Group()
 	if err != nil {
 		return false, err
 	}
@@ -110,5 +96,50 @@ func (resolver *Resolver) DeleteGroup(ctx context.Context, args *struct {
 	}
 
 	group.Delete()
+	return true, nil
+}
+
+func (resolver *Resolver) Play(ctx context.Context, args *struct {
+	Seconds int
+}) (bool, error) {
+
+	return trigger(ctx, args.Seconds, model.Play)
+}
+
+func (resolver *Resolver) Pause(ctx context.Context, args *struct {
+	Seconds int
+}) (bool, error) {
+	return trigger(ctx, args.Seconds, model.Pause)
+}
+
+func (resolver *Resolver) Scrub(ctx context.Context, args *struct {
+	Seconds int
+}) (bool, error) {
+	return trigger(ctx, args.Seconds, model.Scrub)
+}
+
+func trigger(ctx context.Context, seconds int, event string) (bool, error) {
+	if seconds < 0 {
+		return false, errors.New("Seconds cannot be less than 0")
+	}
+
+	me, err := model.AuthenticatedUser(ctx, Me)
+	if err != nil {
+		return false, err
+	}
+
+	group, err := me.Group()
+	if err != nil {
+		return false, err
+	}
+
+	_, err = pusherClient.Trigger(group.ID.String(), model.Play, model.Event{
+		Seconds: seconds,
+	})
+
+	if err != nil {
+		return false, err
+	}
+
 	return true, nil
 }

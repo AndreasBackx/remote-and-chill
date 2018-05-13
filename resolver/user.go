@@ -38,12 +38,10 @@ func (r *UserResolver) ExpiresAt() graphql.Time {
 }
 
 func (r *UserResolver) Group() (*GroupResolver, error) {
-	for _, group := range model.Groups {
-		for _, member := range group.Members {
-			if member == r.user {
-				return &GroupResolver{group}, nil
-			}
-		}
+	group, err := r.user.Group()
+
+	if group == nil {
+		return nil, err
 	}
-	return nil, errors.New("User does not belong to a group? This should never be the case")
+	return &GroupResolver{group}, err
 }
