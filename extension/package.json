@@ -1,0 +1,46 @@
+{
+    "name": "firefox-addon-skeleton",
+    "description": "Skeleton for a Firefox addon",
+    "version": "1.0.0",
+    "license": "MPL",
+    "author": "Matthias Simon",
+    "homepage": "https://github.com/simomat/firefox-addon-skeleton#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/simomat/firefox-addon-skeleton.git"
+    },
+    "bugs": {
+        "url": "https://github.com/simomat/firefox-addon-skeleton/issues"
+    },
+    "scripts": {
+        "build": "gulp",
+        "clean": "gulp clean",
+        "test": "mocha --compilers js:babel-core/register",
+        "start": "web-ext run -s dist/ --start-url about:debugging --start-url about:addons --verbose",
+        "lint": "web-ext lint -s dist/",
+        "pack": "web-ext build -s dist/",
+        "sign": "web-ext sign -s dist/"
+    },
+    "dependencies": {
+        "apollo-boost": "^0.1.6",
+        "graphql": "^0.13.2",
+        "graphql-tag": "^2.9.2"
+    },
+    "devDependencies": {
+        "babel-core": "^6.24.1",
+        "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+        "gulp": "^3.9.1",
+        "mocha": "^3.3.0",
+        "rollup-plugin-commonjs": "^8.0.2",
+        "rollup-plugin-node-resolve": "^3.0.0",
+        "rollup-stream": "^1.19.0",
+        "vinyl-source-stream": "^1.1.0",
+        "web-ext": "^1.9.1"
+    },
+    "babel": {
+        "plugins": [
+            "transform-es2015-modules-commonjs"
+        ]
+    },
+    "private": true
+}
