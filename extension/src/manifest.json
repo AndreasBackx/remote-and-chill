@@ -6,7 +6,12 @@
     "content_scripts": [
         {
             "matches": ["*://*.netflix.com/*"],
-            "js": ["netflix.js"]
+            "js": ["content/netflix.js"]
         }
-    ]
+    ],
+    "browser_action": {
+        "default_title": "Remote and Chill",
+        "default_popup": "popup/index.html"
+    },
+    "permissions": ["<all_urls>"]
 }

@@ -1,22 +1,21 @@
 {
-    "name": "firefox-addon-skeleton",
-    "description": "Skeleton for a Firefox addon",
-    "version": "1.0.0",
-    "license": "MPL",
-    "author": "Matthias Simon",
-    "homepage": "https://github.com/simomat/firefox-addon-skeleton#readme",
+    "name": "remote-and-chill",
+    "description": "Watch movies together remotely!",
+    "version": "0.1.0",
+    "license": "MIT",
+    "author": "Andreas Backx",
+    "homepage": "https://github.com/AndreasBackx/remote-and-chill",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/simomat/firefox-addon-skeleton.git"
+        "url": "git+https://github.com/AndreasBackx/remote-and-chill.git"
     },
     "bugs": {
-        "url": "https://github.com/simomat/firefox-addon-skeleton/issues"
+        "url": "https://github.com/AndreasBackx/remote-and-chill/issues"
     },
     "scripts": {
-        "build": "gulp",
-        "clean": "gulp clean",
-        "test": "mocha --compilers js:babel-core/register",
-        "start": "web-ext run -s dist/ --start-url about:debugging --start-url about:addons --verbose",
+        "build": "webpack-cli && cp src/*.json dist",
+        "clean": "rm -rf ./dist",
+        "start": "web-ext run -s dist/ --start-url about:debugging --start-url about:addons --verbose --firefox=firefox-developer-edition",
         "lint": "web-ext lint -s dist/",
         "pack": "web-ext build -s dist/",
         "sign": "web-ext sign -s dist/"
@@ -24,23 +23,21 @@
     "dependencies": {
         "apollo-boost": "^0.1.6",
         "graphql": "^0.13.2",
-        "graphql-tag": "^2.9.2"
+        "graphql-tag": "^2.9.2",
+        "vue": "^2.5.16"
     },
     "devDependencies": {
-        "babel-core": "^6.24.1",
-        "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-        "gulp": "^3.9.1",
-        "mocha": "^3.3.0",
-        "rollup-plugin-commonjs": "^8.0.2",
-        "rollup-plugin-node-resolve": "^3.0.0",
-        "rollup-stream": "^1.19.0",
-        "vinyl-source-stream": "^1.1.0",
-        "web-ext": "^1.9.1"
-    },
-    "babel": {
-        "plugins": [
-            "transform-es2015-modules-commonjs"
-        ]
+        "clean-webpack-plugin": "^0.1.19",
+        "copy-webpack-plugin": "^4.5.1",
+        "css-loader": "^0.28.11",
+        "node-sass": "^4.9.0",
+        "sass-loader": "^7.0.1",
+        "vue-cli": "^2.9.3",
+        "vue-loader": "^15.0.11",
+        "vue-style-loader": "^4.1.0",
+        "vue-template-compiler": "^2.0.0",
+        "webpack": "^4.8.3",
+        "webpack-cli": "^2.1.3"
     },
     "private": true
 }

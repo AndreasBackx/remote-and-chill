@@ -9,9 +9,9 @@ type Mutation {
     deleteGroup(): Boolean!
 
     # Play the video for a group at a specific time.
-    play(seconds: int): Boolean!
+    play(seconds: Int!): Boolean!
     # Pause the video for a group at a specific time.
-    pause(seconds: int): Boolean!
+    pause(seconds: Int!): Boolean!
     # Scrub the video for a group at a specific time.
-    scrub(seconds: int): Boolean!
+    scrub(seconds: Int!): Boolean!
 }

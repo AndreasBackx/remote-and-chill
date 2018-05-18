@@ -63,7 +63,7 @@ func (resolver *Resolver) JoinGroup(ctx context.Context, args *struct {
 	return &GroupResponseResolver{response, false}, nil
 }
 
-func (resolver *Resolver) LeaveGroup(ctx context.Context, args *struct{}) (*GroupResponseResolver, error) {
+func (resolver *Resolver) LeaveGroup(ctx context.Context) (*GroupResponseResolver, error) {
 	me, err := model.AuthenticatedUser(ctx, Me)
 	if err != nil {
 		return nil, err
@@ -80,7 +80,7 @@ func (resolver *Resolver) LeaveGroup(ctx context.Context, args *struct{}) (*Grou
 	return &GroupResponseResolver{response, false}, nil
 }
 
-func (resolver *Resolver) DeleteGroup(ctx context.Context, args *struct{}) (bool, error) {
+func (resolver *Resolver) DeleteGroup(ctx context.Context) (bool, error) {
 	me, err := model.AuthenticatedUser(ctx, Me)
 	if err != nil {
 		return false, err

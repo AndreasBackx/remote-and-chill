@@ -6,6 +6,7 @@ import (
 	"github.com/AndreasBackx/remote-and-chill/resolver"
 	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/pusher/pusher-http-go"
+	"github.com/rs/cors"
 	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 	"log"
@@ -13,6 +14,16 @@ import (
 )
 
 func apiHandler(writer http.ResponseWriter, request *http.Request) {
+	if origin := request.Header.Get("Origin"); origin != "" {
+		allowedHeaders := "*"
+		// allowedHeaders := "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization,X-CSRF-Token"
+
+		writer.Header().Set("Access-Control-Allow-Origin", "*")
+		writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		writer.Header().Set("Access-Control-Allow-Headers", allowedHeaders)
+		writer.Header().Set("Access-Control-Expose-Headers", "Authorization")
+	}
+
 	secretString := request.Header.Get("Authorization")
 	secret, err := uuid.FromString(secretString)
 	ctx := request.Context()
@@ -61,7 +72,14 @@ func main() {
 	}
 	resolver.Setup(client)
 
-	http.HandleFunc("/", apiHandler)
+	// http.HandleFunc("/", apiHandler)
 
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	log.Fatal(
+		http.ListenAndServe(
+			":3000",
+			cors.AllowAll().Handler(
+				http.HandlerFunc(apiHandler),
+			),
+		),
+	)
 }
