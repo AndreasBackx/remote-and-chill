@@ -62,4 +62,8 @@ module.exports = {
             },
         ]),
     ],
+    stats: {
+        // Disable warnings for size limits as these do not apply to extensions.
+        warnings: false,
+    },
 };

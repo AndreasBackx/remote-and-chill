@@ -1,14 +1,15 @@
 <template>
     <div id="app">
-        Hello world
+        <group></group>
     </div>
 </template>
 
 <script>
-console.log("Test");
+import Group from "./components/Group.vue";
+
 export default {
     name: "App",
-    components: {},
+    components: { Group },
 };
 </script>
 
