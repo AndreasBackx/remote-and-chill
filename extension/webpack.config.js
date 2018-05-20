@@ -1,5 +1,6 @@
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 module.exports = {
@@ -8,14 +9,13 @@ module.exports = {
         "popup/main.js": "./src/popup/main.js",
     },
     output: {
-        path:
-            "/home/andreas/Development/Go/src/github.com/AndreasBackx/remote-and-chill/extension/dist",
         filename: "[name]",
         library: "remote-and-chill",
         libraryTarget: "umd",
     },
     watch: true,
     mode: "production",
+    devtool: "source-map",
     module: {
         rules: [
             {
@@ -43,12 +43,17 @@ module.exports = {
                 test: /\.(png|jpg|gif|svg)$/,
                 loader: "file-loader",
             },
+            {
+                test: /\.(gql|graphql)$/,
+                loader: "graphql-tag/loader",
+            },
         ],
     },
     resolve: {
         extensions: [".js", ".vue"],
     },
     plugins: [
+        new HardSourceWebpackPlugin(),
         new VueLoaderPlugin(),
         new CleanWebpackPlugin(["dist"]),
         new CopyWebpackPlugin([
@@ -59,6 +64,10 @@ module.exports = {
             {
                 from: "./src/popup/index.html",
                 to: "popup/index.html",
+            },
+            {
+                from: "./src/shared/browser-polyfill.js",
+                to: "shared/browser-polyfill.js",
             },
         ]),
     ],

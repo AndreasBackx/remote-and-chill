@@ -1,0 +1,25 @@
+mutation {
+    leaveGroup {
+        user {
+            id
+            secret
+            name
+            expiresAt
+            group {
+                name
+            }
+        }
+        group {
+            id
+            name
+            owner {
+                id
+                name
+            }
+            members {
+                id
+                name
+            }
+        }
+    }
+}

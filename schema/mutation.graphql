@@ -1,11 +1,11 @@
 type Mutation {
     # Create a group and a user.
     createGroup(name: String!, userName: String!): GroupResponse!
-    # # Join a group and create a user if you're not registered.
+    # Join a group and create a user if you're not registered.
     joinGroup(groupId: ID!, userName: String!): GroupResponse!
-    # # Leave a group and delete your user.
+    # Leave a group and delete your user.
     leaveGroup(): GroupResponse!
-    # # Delete a group, only the owner can delete a group. Returns true if group was deleted.
+    # Delete a group, only the owner can delete a group. Returns true if group was deleted.
     deleteGroup(): Boolean!
 
     # Play the video for a group at a specific time.

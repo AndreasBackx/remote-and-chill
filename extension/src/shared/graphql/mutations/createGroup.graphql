@@ -1,0 +1,25 @@
+mutation($name: String!, $userName: String!) {
+    createGroup(name: $name, userName: $userName) {
+        user {
+            id
+            secret
+            name
+            expiresAt
+            group {
+                name
+            }
+        }
+        group {
+            id
+            name
+            owner {
+                id
+                name
+            }
+            members {
+                id
+                name
+            }
+        }
+    }
+}

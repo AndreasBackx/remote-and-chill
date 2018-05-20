@@ -1,0 +1,3 @@
+mutation($seconds: Int!) {
+    play(seconds: $seconds)
+}

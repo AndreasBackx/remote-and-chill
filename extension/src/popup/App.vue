@@ -12,9 +12,3 @@ export default {
     components: { Group },
 };
 </script>
-
-<style lang="scss">
-#app {
-    color: red;
-}
-</style>

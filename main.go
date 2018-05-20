@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/AndreasBackx/remote-and-chill/model"
 	"github.com/AndreasBackx/remote-and-chill/resolver"
 	graphql "github.com/graph-gophers/graphql-go"
@@ -14,18 +15,12 @@ import (
 )
 
 func apiHandler(writer http.ResponseWriter, request *http.Request) {
-	if origin := request.Header.Get("Origin"); origin != "" {
-		allowedHeaders := "*"
-		// allowedHeaders := "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization,X-CSRF-Token"
+	fmt.Printf("%s %s\n", request.Method, request.RequestURI)
 
-		writer.Header().Set("Access-Control-Allow-Origin", "*")
-		writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		writer.Header().Set("Access-Control-Allow-Headers", allowedHeaders)
-		writer.Header().Set("Access-Control-Expose-Headers", "Authorization")
-	}
-
-	secretString := request.Header.Get("Authorization")
-	secret, err := uuid.FromString(secretString)
+	authorization := request.Header.Get("Authorization")
+	fmt.Printf("Authorization: %s\n", authorization)
+	fmt.Printf("Headers: %v\n", request.Header)
+	secret, err := uuid.FromString(authorization)
 	ctx := request.Context()
 
 	if err == nil {
