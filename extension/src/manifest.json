@@ -5,8 +5,8 @@
     "description": "Watch movies together remotely!",
     "content_scripts": [
         {
-            "matches": ["*://*.netflix.com/*"],
-            "js": ["shared/browser-polyfill.js", "content/netflix.js"]
+            "matches": ["*://app.plex.tv/*"],
+            "js": ["shared/browser-polyfill.js", "content/plex/main.js"]
         }
     ],
     "browser_action": {

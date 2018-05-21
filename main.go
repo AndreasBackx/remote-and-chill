@@ -18,8 +18,6 @@ func apiHandler(writer http.ResponseWriter, request *http.Request) {
 	fmt.Printf("%s %s\n", request.Method, request.RequestURI)
 
 	authorization := request.Header.Get("Authorization")
-	fmt.Printf("Authorization: %s\n", authorization)
-	fmt.Printf("Headers: %v\n", request.Header)
 	secret, err := uuid.FromString(authorization)
 	ctx := request.Context()
 
@@ -39,6 +37,8 @@ func apiHandler(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	schema := graphql.MustParseSchema(SchemaString(), &resolver.Resolver{})
+	// fmt.Printf("%v\n", params.Query)
+	// fmt.Printf("%v\n", params.Variables)
 	response := schema.Exec(ctx, params.Query, params.OperationName, params.Variables)
 	responseJSON, err := json.Marshal(response)
 	if err != nil {
@@ -66,8 +66,6 @@ func main() {
 		Cluster: config.Pusher.Cluster,
 	}
 	resolver.Setup(client)
-
-	// http.HandleFunc("/", apiHandler)
 
 	log.Fatal(
 		http.ListenAndServe(

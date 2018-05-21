@@ -8,14 +8,24 @@ const httpLink = new HttpLink({
     uri: "http://localhost:3000",
 });
 
-const authMiddleware = setContext((operation, { headers }) =>
-    browser.storage.local.get("me").then(data => ({
-        headers: {
-            ...headers,
-            Authorization: data.me.secret,
-        },
-    }))
-);
+const authMiddleware = setContext((operation, { headers }) => {
+    return browser.storage.local
+        .get("me")
+        .then(data => ({
+            headers: {
+                ...headers,
+                Authorization: data.me.secret,
+            },
+        }))
+        .catch(error => {
+            console.warn("Not yet authenticated.");
+            return {
+                headers: {
+                    ...headers,
+                },
+            };
+        });
+});
 
 const apolloClient = new ApolloClient({
     link: from([authMiddleware, httpLink]),

@@ -100,25 +100,25 @@ func (resolver *Resolver) DeleteGroup(ctx context.Context) (bool, error) {
 }
 
 func (resolver *Resolver) Play(ctx context.Context, args *struct {
-	Seconds int
+	Seconds int32
 }) (bool, error) {
 
 	return trigger(ctx, args.Seconds, model.Play)
 }
 
 func (resolver *Resolver) Pause(ctx context.Context, args *struct {
-	Seconds int
+	Seconds int32
 }) (bool, error) {
 	return trigger(ctx, args.Seconds, model.Pause)
 }
 
 func (resolver *Resolver) Scrub(ctx context.Context, args *struct {
-	Seconds int
+	Seconds int32
 }) (bool, error) {
 	return trigger(ctx, args.Seconds, model.Scrub)
 }
 
-func trigger(ctx context.Context, seconds int, event string) (bool, error) {
+func trigger(ctx context.Context, seconds int32, event string) (bool, error) {
 	if seconds < 0 {
 		return false, errors.New("Seconds cannot be less than 0")
 	}
@@ -133,7 +133,7 @@ func trigger(ctx context.Context, seconds int, event string) (bool, error) {
 		return false, err
 	}
 
-	_, err = pusherClient.Trigger(group.ID.String(), model.Play, model.Event{
+	_, err = pusherClient.Trigger(group.ID.String(), event, model.Event{
 		Seconds: seconds,
 	})
 

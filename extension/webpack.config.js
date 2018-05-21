@@ -5,7 +5,7 @@ const VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 module.exports = {
     entry: {
-        "content/netflix.js": "./src/content/netflix.js",
+        "content/plex/main.js": "./src/content/plex/main.js",
         "popup/main.js": "./src/popup/main.js",
     },
     output: {

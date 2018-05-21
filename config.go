@@ -22,7 +22,7 @@ type PusherConfig struct {
 var DefaultConfig = Config{
 	Pusher: PusherConfig{
 		Secure:  true,
-		Host:    "api.pusherapp.com",
+		Host:    "api-eu.pusher.com",
 		Cluster: "eu",
 	},
 }

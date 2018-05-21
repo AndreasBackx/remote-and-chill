@@ -7,5 +7,5 @@ const (
 )
 
 type Event struct {
-	Seconds int `json:"seconds"`
+	Seconds int32
 }
